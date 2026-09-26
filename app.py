@@ -174,7 +174,7 @@ def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
     try:
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 temperature=temperature,
