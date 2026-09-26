@@ -7,16 +7,169 @@ from textblob import TextBlob
 # ----------------------------------------------------------------------
 # PAGE CONFIG
 # ----------------------------------------------------------------------
-st.set_page_config(page_title="AI Content Creation & Analysis System", page_icon="🎙️", layout="wide")
+st.set_page_config(page_title="Signal — AI Content Studio", page_icon="🎙️", layout="wide")
+
+# ----------------------------------------------------------------------
+# THEME — a small broadcast-studio identity: deep ink background,
+# warm amber "on-air" accent, editorial serif for headings.
+# ----------------------------------------------------------------------
+CUSTOM_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #FAF8F3;
+  --surface: #FFFFFF;
+  --surface-2: #F4F1E9;
+  --accent: #B8722C;
+  --accent-soft: rgba(184,114,44,0.10);
+  --accent-ink: #FFFFFF;
+  --teal: #2F8F82;
+  --text: #201C16;
+  --text-muted: #7A7266;
+  --border: #E6E1D6;
+}
+
+html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+.stApp { background: var(--bg); color: var(--text); }
+#MainMenu, footer { visibility: hidden; }
+
+/* ---- Hero ---- */
+.signal-hero {
+  padding: 1.6rem 0 1.6rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.6rem;
+}
+.signal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 0.7rem;
+}
+.signal-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.signal-title {
+  font-family: 'Fraunces', serif;
+  font-size: 2.75rem;
+  font-weight: 600;
+  line-height: 1.05;
+  margin: 0 0 0.55rem 0;
+  color: var(--text);
+}
+.signal-sub {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  max-width: 620px;
+  line-height: 1.5;
+}
+
+/* ---- Tabs styled as a panel selector ---- */
+.stTabs [data-baseweb="tab-list"] {
+  gap: 4px;
+  background: var(--surface);
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.stTabs [data-baseweb="tab"] {
+  height: 44px;
+  border-radius: 7px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.stTabs [aria-selected="true"] {
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+}
+.stTabs [data-baseweb="tab-highlight"] { background: transparent; }
+
+/* ---- Section labels inside tabs ---- */
+.signal-label {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0.2rem 0 0.9rem 0;
+}
+
+/* ---- Buttons ---- */
+.stButton>button {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  transition: background 0.15s ease;
+}
+.stButton>button:hover { background: #A0631F; color: var(--accent-ink); }
+.stButton>button:active { background: #8C561B; }
+
+/* ---- Output cards ---- */
+.signal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 1.3rem 1.5rem;
+  margin-top: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  box-shadow: 0 1px 3px rgba(32,28,22,0.05);
+}
+.signal-card-teal { border-left-color: var(--teal); }
+.signal-card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.signal-card-teal .signal-card-label { color: var(--teal); }
+
+/* ---- Inputs ---- */
+.stTextInput input, .stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] > div {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+}
+.stTextInput input:focus, .stTextArea textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent) !important;
+}
+
+/* ---- Metrics (text analysis) ---- */
+[data-testid="stMetricValue"] {
+  color: var(--accent);
+  font-family: 'Fraunces', serif;
+}
+[data-testid="stMetricLabel"] { color: var(--text-muted); }
+
+hr { border-color: var(--border); }
+</style>
+"""
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 # ----------------------------------------------------------------------
 # API CLIENT
 # ----------------------------------------------------------------------
 def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
     """Single wrapper around the LLM API call used by every module."""
-    api_key = st.session_state.get("api_key", "")
+    # Reads the key from Streamlit Secrets only — set once in
+    # Settings -> Secrets as GEMINI_API_KEY = "..."; no input box needed.
+    api_key = st.secrets.get("GEMINI_API_KEY", "")
     if not api_key:
-        return "⚠️ Please enter your Gemini API key in the sidebar first."
+        return ("⚠️ No Gemini API key configured. Add GEMINI_API_KEY in this app's "
+                "Streamlit Cloud Settings → Secrets.")
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel("gemini-1.5-flash")
     response = model.generate_content(
@@ -118,76 +271,89 @@ def compare_parameters(topic):
 
 
 # ----------------------------------------------------------------------
-# SIDEBAR
+# HERO
 # ----------------------------------------------------------------------
-with st.sidebar:
-    st.header("⚙️ Settings")
-    st.session_state["api_key"] = st.text_input(
-        "Gemini API Key", type="password",
-        help="Get a free one at aistudio.google.com/apikey. "
-             "For a public deploy, add it as a Streamlit secret instead (see README)."
-    )
-    st.caption("Your key is only used for this session and is never stored.")
-
-st.title("🎙️ AI-Powered Content Creation & Analysis System")
-st.caption("Prompt Engineering — Assignment 8 · Walchand Institute of Technology, Solapur")
+st.markdown("""
+<div class="signal-hero">
+  <div class="signal-eyebrow"><span class="signal-dot"></span> ASSIGNMENT 8 · PROMPT ENGINEERING</div>
+  <div class="signal-title">Signal</div>
+  <div class="signal-sub">A small studio for scripting content, planning an episode, and reading
+  the room — built for Walchand Institute of Technology, Solapur.</div>
+</div>
+""", unsafe_allow_html=True)
 
 tab1, tab2, tab3, tab4 = st.tabs(
-    ["✍️ Content Generation", "🎧 Podcast Planning", "📊 Text Analysis", "🧪 Parameter Experimentation"]
+    ["Write", "Plan an episode", "Read the room", "Parameter lab"]
 )
 
 # ---------------- TAB 1: CONTENT GENERATION ----------------
 with tab1:
-    st.subheader("Generate a poem, story, or social media post")
+    st.markdown('<div class="signal-label">Generate a poem, story, or social post</div>', unsafe_allow_html=True)
     col1, col2 = st.columns([2, 1])
     with col1:
-        topic1 = st.text_input("Enter a topic", key="topic1", placeholder="e.g. Climate Change")
+        topic1 = st.text_input("Topic", key="topic1", placeholder="e.g. Climate Change")
     with col2:
-        content_type = st.selectbox("Content type", ["Poem", "Story", "Social Media Post"])
-    if st.button("Generate Content", type="primary"):
+        content_type = st.selectbox("Format", ["Poem", "Story", "Social Media Post"])
+    if st.button("Generate", type="primary", key="btn1"):
         if topic1:
-            with st.spinner("Generating..."):
-                st.write(generate_content(topic1, content_type))
+            with st.spinner("Writing..."):
+                output = generate_content(topic1, content_type)
+            st.markdown(
+                f'<div class="signal-card"><span class="signal-card-label">{content_type.upper()}</span>{output}</div>',
+                unsafe_allow_html=True,
+            )
         else:
-            st.warning("Please enter a topic.")
+            st.warning("Enter a topic first.")
 
 # ---------------- TAB 2: PODCAST PLANNING ----------------
 with tab2:
-    st.subheader("Plan a podcast episode")
-    topic2 = st.text_input("Enter a topic", key="topic2", placeholder="e.g. Climate Change")
-    if st.button("Generate Podcast Plan", type="primary"):
+    st.markdown('<div class="signal-label">Plan a podcast episode</div>', unsafe_allow_html=True)
+    topic2 = st.text_input("Topic", key="topic2", placeholder="e.g. Climate Change")
+    if st.button("Plan episode", type="primary", key="btn2"):
         if topic2:
-            with st.spinner("Planning episode..."):
-                st.markdown(generate_podcast_plan(topic2))
+            with st.spinner("Producing..."):
+                output = generate_podcast_plan(topic2)
+            st.markdown(
+                f'<div class="signal-card signal-card-teal"><span class="signal-card-label">EPISODE BRIEF</span>{output}</div>',
+                unsafe_allow_html=True,
+            )
         else:
-            st.warning("Please enter a topic.")
+            st.warning("Enter a topic first.")
 
 # ---------------- TAB 3: TEXT ANALYSIS ----------------
 with tab3:
-    st.subheader("Sentiment analysis & keyword extraction")
-    text_input = st.text_area("Paste text to analyze", height=150,
-                               placeholder="Paste a paragraph, review, or comment here...")
-    if st.button("Analyze Text", type="primary"):
+    st.markdown('<div class="signal-label">Sentiment & keyword extraction</div>', unsafe_allow_html=True)
+    text_input = st.text_area("Text to analyze", height=150,
+                               placeholder="Paste a paragraph, review, or comment here...",
+                               label_visibility="collapsed")
+    if st.button("Analyze", type="primary", key="btn3"):
         if text_input.strip():
             result = analyze_text(text_input)
             c1, c2, c3 = st.columns(3)
             c1.metric("Sentiment", result["sentiment"])
-            c2.metric("Polarity Score", result["polarity_score"])
-            c3.write("**Top Keywords**")
-            c3.write(", ".join(result["keywords"]) if result["keywords"] else "—")
+            c2.metric("Polarity", result["polarity_score"])
+            c3.markdown(
+                f'<span class="signal-card-label" style="color:var(--teal);">KEYWORDS</span>'
+                f'{", ".join(result["keywords"]) if result["keywords"] else "—"}',
+                unsafe_allow_html=True,
+            )
         else:
-            st.warning("Please enter some text.")
+            st.warning("Paste some text first.")
 
 # ---------------- TAB 4: PARAMETER EXPERIMENTATION ----------------
 with tab4:
-    st.subheader("Compare temperature & Top-P settings")
-    topic4 = st.text_input("Enter a topic", key="topic4", placeholder="e.g. Climate Change")
-    if st.button("Run Comparison", type="primary"):
+    st.markdown('<div class="signal-label">Compare temperature & Top-P</div>', unsafe_allow_html=True)
+    topic4 = st.text_input("Topic", key="topic4", placeholder="e.g. Climate Change")
+    if st.button("Run comparison", type="primary", key="btn4"):
         if topic4:
-            with st.spinner("Generating with different parameters..."):
+            with st.spinner("Generating four variants..."):
                 results = compare_parameters(topic4)
-            for label, output in results.items():
-                st.markdown(f"**{label}**")
-                st.info(output)
+            cols = st.columns(2)
+            for i, (label, output) in enumerate(results.items()):
+                with cols[i % 2]:
+                    st.markdown(
+                        f'<div class="signal-card"><span class="signal-card-label">{label.upper()}</span>{output}</div>',
+                        unsafe_allow_html=True,
+                    )
         else:
-            st.warning("Please enter a topic.")
+            st.warning("Enter a topic first.")
