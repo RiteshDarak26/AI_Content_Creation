@@ -1,7 +1,7 @@
 import streamlit as st
 import re
 from collections import Counter
-from openai import OpenAI
+import google.generativeai as genai
 from textblob import TextBlob
 
 # ----------------------------------------------------------------------
@@ -12,26 +12,22 @@ st.set_page_config(page_title="AI Content Creation & Analysis System", page_icon
 # ----------------------------------------------------------------------
 # API CLIENT
 # ----------------------------------------------------------------------
-def get_client():
-    api_key = st.session_state.get("api_key", "")
-    if not api_key:
-        return None
-    return OpenAI(api_key=api_key)
-
-
 def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
     """Single wrapper around the LLM API call used by every module."""
-    client = get_client()
-    if client is None:
-        return "⚠️ Please enter your OpenAI API key in the sidebar first."
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature,
-        top_p=top_p,
-        max_tokens=max_tokens,
+    api_key = st.session_state.get("api_key", "")
+    if not api_key:
+        return "⚠️ Please enter your Gemini API key in the sidebar first."
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            temperature=temperature,
+            top_p=top_p,
+            max_output_tokens=max_tokens,
+        ),
     )
-    return response.choices[0].message.content.strip()
+    return response.text.strip()
 
 
 # ----------------------------------------------------------------------
@@ -127,8 +123,8 @@ def compare_parameters(topic):
 with st.sidebar:
     st.header("⚙️ Settings")
     st.session_state["api_key"] = st.text_input(
-        "OpenAI API Key", type="password",
-        help="Get one at platform.openai.com/api-keys. "
+        "Gemini API Key", type="password",
+        help="Get a free one at aistudio.google.com/apikey. "
              "For a public deploy, add it as a Streamlit secret instead (see README)."
     )
     st.caption("Your key is only used for this session and is never stored.")
