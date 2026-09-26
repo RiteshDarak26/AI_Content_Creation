@@ -36,6 +36,7 @@ CUSTOM_CSS = """
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stApp { background: var(--bg); color: var(--text); }
 #MainMenu, footer { visibility: hidden; }
+[data-testid="stHeader"] { display: none; }
 
 /* ---- Hero ---- */
 .signal-hero {
@@ -143,7 +144,8 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
 /* ---- Inputs ---- */
 .stTextInput input, .stTextArea textarea,
-.stSelectbox div[data-baseweb="select"] > div {
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox input[role="combobox"] {
   background: var(--surface-2) !important;
   color: var(--text) !important;
   border: 1px solid var(--border) !important;
@@ -152,6 +154,29 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stTextInput input:focus, .stTextArea textarea:focus {
   border-color: var(--accent) !important;
   box-shadow: 0 0 0 1px var(--accent) !important;
+}
+.stTextInput input::placeholder,
+.stTextArea textarea::placeholder,
+.stSelectbox input[role="combobox"]::placeholder {
+    color: #201C16 !important;
+    opacity: 1 !important;
+}
+.stSelectbox input[role="combobox"] {
+    background: #FFFFFF !important;
+    color: var(--text) !important;
+}
+[data-testid="stSelectboxVirtualDropdown"] {
+    background: #FFFFFF !important;
+    color: var(--text) !important;
+}
+[data-testid="stSelectboxVirtualDropdown"] [role="listbox"],
+[data-testid="stSelectboxVirtualDropdown"] [role="option"],
+[data-testid="stSelectboxVirtualDropdown"] [data-item-hl] {
+    background: #FFFFFF !important;
+    color: var(--text) !important;
+}
+[data-testid="stSelectboxVirtualDropdown"] [role="option"][data-focused="true"] {
+    background: var(--accent-soft) !important;
 }
 
 /* ---- Metrics (text analysis) ---- */
@@ -308,8 +333,7 @@ def compare_parameters(topic):
 # ----------------------------------------------------------------------
 st.markdown("""
 <div class="signal-hero">
-  <div class="signal-eyebrow"><span class="signal-dot"></span> ASSIGNMENT 8 · PROMPT ENGINEERING</div>
-  <div class="signal-title">Signal</div>
+    <div class="signal-title">AI content creator</div>
   <div class="signal-sub">A small studio for scripting content, planning an episode, and reading
   the room — built for Walchand Institute of Technology, Solapur.</div>
 </div>
