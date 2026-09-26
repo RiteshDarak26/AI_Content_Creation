@@ -80,15 +80,19 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
   border-radius: 10px;
   border: 1px solid var(--border);
 }
-.stTabs [data-baseweb="tab"] {
+.stTabs [data-baseweb="tab"],
+.stTabs [role="tab"],
+.stTabs [role="tab"] p {
   height: 44px;
   border-radius: 7px;
-  color: var(--text-muted);
+    color: #40382F !important;
   font-weight: 500;
 }
-.stTabs [aria-selected="true"] {
+.stTabs [data-baseweb="tab"][aria-selected="true"],
+.stTabs [role="tab"][aria-selected="true"],
+.stTabs [role="tab"][aria-selected="true"] p {
   background: var(--accent-soft) !important;
-  color: var(--accent) !important;
+    color: #824A14 !important;
 }
 .stTabs [data-baseweb="tab-highlight"] { background: transparent; }
 
