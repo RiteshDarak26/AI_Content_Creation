@@ -163,7 +163,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 # ----------------------------------------------------------------------
 # API CLIENT
 # ----------------------------------------------------------------------
-def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
+def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=1024):
     """Single wrapper around the LLM API call used by every module."""
     # Reads the key from Streamlit Secrets only — set once in
     # Settings -> Secrets as GEMINI_API_KEY = "..."; no input box needed.
@@ -209,15 +209,15 @@ def generate_content(topic, content_type="Poem"):
     role = "You are a creative content writer skilled in storytelling and poetry."
     context = f"The user wants engaging content about the topic: {topic}."
     if content_type == "Poem":
-        task = f"Write a short, evocative poem (4-6 stanzas) about {topic}."
+        task = f"Write a rich, evocative poem (8-12 stanzas) about {topic}."
     elif content_type == "Story":
-        task = f"Write a short story (200-300 words) about {topic}."
+        task = f"Write a detailed short story (600-900 words) about {topic}, with a clear beginning, middle, and end."
     else:
         task = f"Write an engaging social media post (under 280 characters) about {topic}, including relevant hashtags."
     constraints = "Keep language simple, avoid offensive content, be original."
     output_format = "Return only the content, no extra commentary."
     prompt = build_structured_prompt(role, context, task, constraints, output_format)
-    return generate_response(prompt, temperature=0.8)
+    return generate_response(prompt, temperature=0.8, max_tokens=1500)
 
 
 # ----------------------------------------------------------------------
@@ -226,15 +226,17 @@ def generate_content(topic, content_type="Poem"):
 def generate_podcast_plan(topic):
     role = "You are an experienced podcast producer and content strategist."
     context = f"Planning a new podcast episode on the topic: {topic}."
-    task = ("Generate: 1) A catchy podcast title, 2) A 2-3 sentence description, "
-            "3) An ideal guest type/profile for this episode, "
-            "4) Five thoughtful interview questions for the guest.")
+    task = ("Generate: 1) A catchy podcast title, 2) A detailed 5-6 sentence description "
+            "covering what the episode explores and why it matters, "
+            "3) An ideal guest type/profile for this episode with a short rationale, "
+            "4) Eight thoughtful, open-ended interview questions for the guest, each with "
+            "a brief one-sentence note on why it's worth asking.")
     constraints = "Keep the tone professional yet conversational; questions should be open-ended."
     output_format = ("Return the result in this exact structure:\n"
                       "Title: <title>\nDescription: <description>\nGuest Type: <guest type>\n"
-                      "Questions:\n1. ...\n2. ...\n3. ...\n4. ...\n5. ...")
+                      "Questions:\n1. ...\n2. ...\n3. ...\n4. ...\n5. ...\n6. ...\n7. ...\n8. ...")
     prompt = build_structured_prompt(role, context, task, constraints, output_format)
-    return generate_response(prompt, temperature=0.7)
+    return generate_response(prompt, temperature=0.7, max_tokens=1500)
 
 
 # ----------------------------------------------------------------------
@@ -263,7 +265,7 @@ def analyze_text(text):
 # 5. PARAMETER EXPERIMENTATION
 # ----------------------------------------------------------------------
 def compare_parameters(topic):
-    prompt = f"Write a two-line tagline for a brand related to {topic}."
+    prompt = f"Write a short brand pitch (3-4 sentences) for a brand related to {topic}."
     configs = [
         ("Low Temp (0.2)", {"temperature": 0.2, "top_p": 1.0}),
         ("High Temp (1.0)", {"temperature": 1.0, "top_p": 1.0}),
@@ -272,7 +274,7 @@ def compare_parameters(topic):
     ]
     results = {}
     for label, params in configs:
-        results[label] = generate_response(prompt, **params)
+        results[label] = generate_response(prompt, max_tokens=400, **params)
     return results
 
 
