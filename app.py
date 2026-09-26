@@ -1,7 +1,8 @@
 import streamlit as st
 import re
 from collections import Counter
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from textblob import TextBlob
 
 # ----------------------------------------------------------------------
@@ -170,11 +171,11 @@ def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
     if not api_key:
         return ("⚠️ No Gemini API key configured. Add GEMINI_API_KEY in this app's "
                 "Streamlit Cloud Settings → Secrets.")
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    response = model.generate_content(
-        prompt,
-        generation_config=genai.types.GenerationConfig(
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(
             temperature=temperature,
             top_p=top_p,
             max_output_tokens=max_tokens,
