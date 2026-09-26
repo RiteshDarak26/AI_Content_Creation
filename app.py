@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="Signal — AI Content Studio",
     page_icon="🎙️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -30,12 +30,9 @@ st.markdown(
     :root {
         --bg: #F7F8FC;
         --surface: #FFFFFF;
-        --surface-soft: #F1F3F8;
         --primary: #5B4CF6;
         --primary-dark: #4939DF;
         --primary-soft: #EEECFF;
-        --green: #18A673;
-        --orange: #E58A2B;
         --text: #171925;
         --muted: #73778A;
         --border: #E5E7EF;
@@ -59,79 +56,54 @@ st.markdown(
         background: transparent;
     }
 
-    /* ========================================================
-       SIDEBAR
-       ======================================================== */
-
+    /* Remove sidebar completely */
     [data-testid="stSidebar"] {
-        background: #171925;
-        border-right: 1px solid #282A38;
+        display: none !important;
     }
 
-    [data-testid="stSidebar"] * {
-        color: #F8F8FC !important;
+    /* Main container */
+    .main-wrap {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 25px 35px 50px 35px;
     }
 
-    .sidebar-logo {
-        padding: 8px 8px 28px 8px;
+    /* Top navigation */
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0 25px 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 40px;
     }
 
-    .sidebar-logo-main {
-        font-size: 28px;
+    .brand {
+        font-family: "Playfair Display", serif;
+        font-size: 25px;
         font-weight: 700;
-        letter-spacing: -1px;
+        color: var(--text);
     }
 
-    .sidebar-logo-sub {
-        font-size: 10px;
-        color: #AEB1C2 !important;
+    .brand-sub {
+        color: var(--muted);
+        font-size: 9px;
         letter-spacing: 2px;
+        font-weight: 700;
         margin-top: -3px;
     }
 
-    .sidebar-section {
-        color: #85899E !important;
+    .assignment-badge {
+        background: var(--primary-soft);
+        color: var(--primary);
+        border-radius: 30px;
+        padding: 8px 14px;
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: 1.5px;
-        margin: 22px 8px 9px 8px;
-        text-transform: uppercase;
+        letter-spacing: .5px;
     }
 
-    .sidebar-item {
-        padding: 10px 11px;
-        border-radius: 9px;
-        color: #D9DBE7 !important;
-        font-size: 13px;
-        margin-bottom: 4px;
-    }
-
-    .sidebar-item.active {
-        background: #292B3C;
-        color: white !important;
-    }
-
-    .sidebar-info {
-        background: #202232;
-        border: 1px solid #303245;
-        border-radius: 12px;
-        padding: 13px;
-        margin-top: 30px;
-        font-size: 11px;
-        line-height: 1.55;
-        color: #BFC2D0 !important;
-    }
-
-    /* ========================================================
-       MAIN
-       ======================================================== */
-
-    .main-wrap {
-        max-width: 1180px;
-        margin: 0 auto;
-        padding: 20px 25px 45px 25px;
-    }
-
+    /* Hero */
     .eyebrow {
         color: var(--primary);
         font-size: 11px;
@@ -143,42 +115,39 @@ st.markdown(
 
     .hero-title {
         font-family: "Playfair Display", serif;
-        font-size: clamp(42px, 5vw, 64px);
-        line-height: 1.02;
-        letter-spacing: -2px;
+        font-size: clamp(48px, 7vw, 78px);
+        line-height: 1;
+        letter-spacing: -3px;
         margin: 0;
         color: var(--text);
     }
 
     .hero-subtitle {
-        max-width: 690px;
+        max-width: 720px;
         color: var(--muted);
         font-size: 15px;
-        line-height: 1.7;
-        margin-top: 15px;
+        line-height: 1.75;
+        margin-top: 17px;
     }
 
     .hero-line {
         height: 1px;
         background: var(--border);
-        margin: 28px 0;
+        margin: 32px 0;
     }
 
-    /* ========================================================
-       FEATURE CARDS
-       ======================================================== */
-
+    /* Feature cards */
     .feature-card {
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 15px;
-        padding: 20px;
+        padding: 21px;
         min-height: 145px;
         box-shadow: 0 5px 20px rgba(23, 25, 37, 0.035);
     }
 
     .feature-icon {
-        font-size: 24px;
+        font-size: 25px;
         margin-bottom: 12px;
     }
 
@@ -195,41 +164,31 @@ st.markdown(
         margin-top: 6px;
     }
 
-    /* ========================================================
-       WORKSPACE
-       ======================================================== */
-
+    /* Section */
     .section-title {
-        font-size: 19px;
+        font-size: 20px;
         font-weight: 700;
-        margin: 34px 0 4px 0;
+        margin: 38px 0 5px 0;
         color: var(--text);
     }
 
     .section-subtitle {
         color: var(--muted);
         font-size: 12px;
-        margin-bottom: 16px;
+        margin-bottom: 18px;
     }
 
-    /* ========================================================
-       TABS
-       ======================================================== */
-
+    /* Tabs */
     button[data-baseweb="tab"] {
         font-family: "DM Sans", sans-serif !important;
         font-size: 12px !important;
         font-weight: 600 !important;
     }
 
-    /* ========================================================
-       INPUTS
-       ======================================================== */
-
+    /* Inputs */
     .stTextInput input,
     .stTextArea textarea,
-    .stSelectbox div[data-baseweb="select"] > div,
-    .stNumberInput input {
+    .stSelectbox div[data-baseweb="select"] > div {
         background: #FFFFFF !important;
         color: #171925 !important;
         border: 1px solid #D9DCE7 !important;
@@ -238,16 +197,14 @@ st.markdown(
 
     .stTextInput label,
     .stTextArea label,
-    .stSelectbox label,
-    .stNumberInput label,
-    .stSlider label {
+    .stSelectbox label {
         color: #45485A !important;
         font-size: 12px !important;
         font-weight: 600 !important;
     }
 
     /* ========================================================
-       FORCE BUTTON VISIBILITY
+       BUTTONS
        ======================================================== */
 
     [data-testid="stButton"] button,
@@ -288,10 +245,7 @@ st.markdown(
         border-color: #4939DF !important;
     }
 
-    /* ========================================================
-       OUTPUT
-       ======================================================== */
-
+    /* Output */
     .output-box {
         background: #FFFFFF;
         border: 1px solid var(--border);
@@ -317,10 +271,7 @@ st.markdown(
         white-space: pre-wrap;
     }
 
-    /* ========================================================
-       METRIC CARDS
-       ======================================================== */
-
+    /* Metrics */
     .metric-card {
         background: #FFFFFF;
         border: 1px solid var(--border);
@@ -341,10 +292,7 @@ st.markdown(
         margin-top: 3px;
     }
 
-    /* ========================================================
-       TAGS
-       ======================================================== */
-
+    /* Tags */
     .tag {
         display: inline-block;
         background: var(--primary-soft);
@@ -356,10 +304,7 @@ st.markdown(
         font-weight: 600;
     }
 
-    /* ========================================================
-       PARAMETER CARDS
-       ======================================================== */
-
+    /* Parameter info */
     .parameter-info {
         background: #EEECFF;
         border: 1px solid #DCD8FF;
@@ -382,13 +327,10 @@ st.markdown(
         margin-bottom: 10px;
     }
 
-    /* ========================================================
-       FOOTER
-       ======================================================== */
-
+    /* Footer */
     .footer {
         border-top: 1px solid var(--border);
-        margin-top: 45px;
+        margin-top: 50px;
         padding-top: 18px;
         color: #9094A4;
         font-size: 10px;
@@ -397,6 +339,24 @@ st.markdown(
 
     [data-testid="stDecoration"] {
         display: none;
+    }
+
+    @media (max-width: 768px) {
+        .main-wrap {
+            padding: 18px 16px 40px 16px;
+        }
+
+        .top-nav {
+            margin-bottom: 28px;
+        }
+
+        .assignment-badge {
+            display: none;
+        }
+
+        .hero-title {
+            font-size: 52px;
+        }
     }
     </style>
     """,
@@ -412,17 +372,6 @@ def generate_response(
     thinking_level="medium",
     max_tokens=1024,
 ):
-    """
-    Generate a response using Gemini 3.8 Flash.
-
-    Gemini 3.8 Flash supports:
-        low
-        medium
-        high
-
-    Temperature and top_p are intentionally not used.
-    """
-
     api_key = st.secrets.get(
         "GEMINI_API_KEY",
         "",
@@ -464,16 +413,10 @@ def generate_response(
         if response and response.text:
             return response.text.strip()
 
-        return (
-            "No response was returned by "
-            "the AI model."
-        )
+        return "No response was returned by the AI model."
 
     except Exception as exc:
-        return (
-            "AI generation error:\n\n"
-            f"{exc}"
-        )
+        return f"AI generation error:\n\n{exc}"
 
 
 # ============================================================
@@ -523,13 +466,11 @@ def generate_content(
 
         constraints = (
             "Use vivid imagery, natural language, "
-            "and a memorable ending. "
-            "Keep it around 20–30 lines."
+            "and a memorable ending. Keep it around "
+            "20–30 lines."
         )
 
-        output_format = (
-            "Title followed by the poem."
-        )
+        output_format = "Title followed by the poem."
 
     elif content_type == "Story":
 
@@ -544,33 +485,26 @@ def generate_content(
             "and ending. Use simple but engaging language."
         )
 
-        output_format = (
-            "Title followed by the story."
-        )
+        output_format = "Title followed by the story."
 
     else:
 
-        role = (
-            "a social media content strategist"
-        )
+        role = "a social media content strategist"
 
         task = (
             f"Create a social media post about: {topic}"
         )
 
         constraints = (
-            "Make it engaging and concise. "
-            "Add a strong hook and 3–5 relevant hashtags."
+            "Make it engaging and concise. Add a strong "
+            "hook and 3–5 relevant hashtags."
         )
 
-        output_format = (
-            "Post copy followed by hashtags."
-        )
+        output_format = "Post copy followed by hashtags."
 
     prompt = build_prompt(
         role,
-        "This is an academic demonstration "
-        "of prompt engineering.",
+        "This is an academic demonstration of prompt engineering.",
         task,
         constraints,
         output_format,
@@ -586,28 +520,21 @@ def generate_content(
 # ============================================================
 # PODCAST PLANNER
 # ============================================================
-def generate_podcast_plan(
-    topic,
-):
+def generate_podcast_plan(topic):
+
     prompt = build_prompt(
-        role=(
-            "an experienced podcast producer "
-            "and content strategist"
-        ),
+        role="an experienced podcast producer and content strategist",
         context=(
-            "The user is creating a structured "
-            "podcast episode for an educational "
-            "AI content studio."
+            "The user is creating a structured podcast episode "
+            "for an educational AI content studio."
         ),
         task=(
-            f"Create a complete podcast plan "
-            f"for the topic: {topic}"
+            f"Create a complete podcast plan for the topic: {topic}"
         ),
         constraints=(
-            "Make the plan practical and easy to follow. "
-            "Include a strong opening hook, segments, "
-            "discussion questions, examples, and a "
-            "closing call-to-action."
+            "Make the plan practical and easy to follow. Include "
+            "a strong opening hook, segments, discussion questions, "
+            "examples, and a closing call-to-action."
         ),
         output_format=(
             "1. Episode title\n"
@@ -630,25 +557,17 @@ def generate_podcast_plan(
 # ============================================================
 # TEXT ANALYSIS
 # ============================================================
-def analyze_text(
-    text,
-):
+def analyze_text(text):
+
     blob = TextBlob(text)
 
-    polarity = (
-        blob.sentiment.polarity
-    )
-
-    subjectivity = (
-        blob.sentiment.subjectivity
-    )
+    polarity = blob.sentiment.polarity
+    subjectivity = blob.sentiment.subjectivity
 
     if polarity > 0.15:
         sentiment = "Positive"
-
     elif polarity < -0.15:
         sentiment = "Negative"
-
     else:
         sentiment = "Neutral"
 
@@ -658,51 +577,15 @@ def analyze_text(
     )
 
     stop_words = {
-        "the",
-        "and",
-        "for",
-        "that",
-        "this",
-        "with",
-        "from",
-        "are",
-        "was",
-        "were",
-        "have",
-        "has",
-        "had",
-        "you",
-        "your",
-        "about",
-        "into",
-        "they",
-        "their",
-        "there",
-        "what",
-        "when",
-        "where",
-        "which",
-        "will",
-        "would",
-        "could",
-        "should",
-        "been",
-        "being",
-        "than",
-        "then",
-        "them",
-        "our",
-        "out",
-        "but",
-        "not",
-        "can",
-        "its",
-        "also",
-        "how",
-        "why",
-        "who",
-        "all",
-        "more",
+        "the", "and", "for", "that", "this",
+        "with", "from", "are", "was", "were",
+        "have", "has", "had", "you", "your",
+        "about", "into", "they", "their", "there",
+        "what", "when", "where", "which", "will",
+        "would", "could", "should", "been", "being",
+        "than", "then", "them", "our", "out",
+        "but", "not", "can", "its", "also", "how",
+        "why", "who", "all", "more",
     }
 
     keywords = Counter(
@@ -722,21 +605,7 @@ def analyze_text(
 # ============================================================
 # PARAMETER LAB
 # ============================================================
-def parameter_experiment(
-    topic,
-):
-    """
-    Compare Gemini 3.8 Flash thinking levels.
-
-    Low:
-        Faster / lighter reasoning
-
-    Medium:
-        Balanced reasoning
-
-    High:
-        More reasoning effort
-    """
+def parameter_experiment(topic):
 
     base_prompt = f"""
 Create a short creative description about:
@@ -776,81 +645,6 @@ of prompt engineering.
 
 
 # ============================================================
-# SIDEBAR
-# ============================================================
-with st.sidebar:
-
-    st.markdown(
-        """
-        <div class="sidebar-logo">
-            <div class="sidebar-logo-main">
-                Signal
-            </div>
-
-            <div class="sidebar-logo-sub">
-                AI CONTENT STUDIO
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-section">'
-        'Workspace'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-item active">'
-        '✦ Content Studio'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-item">'
-        '◉ Podcast Planner'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-item">'
-        '◌ Text Analysis'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-item">'
-        '⌁ Parameter Lab'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sidebar-section">'
-        'Assignment'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        """
-        <div class="sidebar-info">
-            <b>Assignment 8</b><br>
-            Prompt Engineering<br><br>
-            Walchand Institute of Technology<br>
-            Solapur
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-# ============================================================
 # MAIN CONTENT
 # ============================================================
 st.markdown(
@@ -858,9 +652,40 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ============================================================
+# TOP NAVIGATION
+# ============================================================
+st.markdown(
+    """
+    <div class="top-nav">
+
+        <div>
+            <div class="brand">
+                Signal
+            </div>
+
+            <div class="brand-sub">
+                AI CONTENT STUDIO
+            </div>
+        </div>
+
+        <div class="assignment-badge">
+            ASSIGNMENT 8 · PROMPT ENGINEERING
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# HERO
+# ============================================================
 st.markdown(
     '<div class="eyebrow">'
-    'Assignment 8 · Prompt Engineering'
+    'AI CONTENT WORKSPACE'
     '</div>',
     unsafe_allow_html=True,
 )
@@ -901,12 +726,10 @@ with c1:
         """
         <div class="feature-card">
             <div class="feature-icon">✍️</div>
-            <div class="feature-title">
-                Create
-            </div>
+            <div class="feature-title">Create</div>
             <div class="feature-text">
-                Generate poems, stories and social
-                media content using structured prompts.
+                Generate poems, stories and social media
+                content using structured prompts.
             </div>
         </div>
         """,
@@ -918,12 +741,10 @@ with c2:
         """
         <div class="feature-card">
             <div class="feature-icon">🎙️</div>
-            <div class="feature-title">
-                Plan
-            </div>
+            <div class="feature-title">Plan</div>
             <div class="feature-text">
-                Build a complete podcast episode
-                outline with hooks, segments and questions.
+                Build complete podcast episode outlines
+                with hooks, segments and questions.
             </div>
         </div>
         """,
@@ -935,9 +756,7 @@ with c3:
         """
         <div class="feature-card">
             <div class="feature-icon">◌</div>
-            <div class="feature-title">
-                Analyse
-            </div>
+            <div class="feature-title">Analyse</div>
             <div class="feature-text">
                 Inspect sentiment, subjectivity and
                 frequent keywords in any text.
@@ -952,9 +771,7 @@ with c4:
         """
         <div class="feature-card">
             <div class="feature-icon">⚙️</div>
-            <div class="feature-title">
-                Experiment
-            </div>
+            <div class="feature-title">Experiment</div>
             <div class="feature-text">
                 Compare Gemini responses using
                 different thinking levels.
@@ -993,7 +810,7 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 
 # ============================================================
-# TAB 1 — WRITE
+# WRITE
 # ============================================================
 with tab1:
 
@@ -1055,20 +872,18 @@ with tab1:
 
         if result:
 
-            safe_result = html.escape(
-                result
-            )
-
             st.markdown(
                 f"""
                 <div class="output-box">
+
                     <div class="output-label">
                         Generated result
                     </div>
 
                     <div class="output-text">
-                        {safe_result}
+                        {html.escape(result)}
                     </div>
+
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1079,6 +894,7 @@ with tab1:
             st.markdown(
                 """
                 <div class="output-box">
+
                     <div class="output-label">
                         Output
                     </div>
@@ -1087,6 +903,7 @@ with tab1:
                         Your generated content will
                         appear here.
                     </div>
+
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1094,7 +911,7 @@ with tab1:
 
 
 # ============================================================
-# TAB 2 — PODCAST
+# PODCAST
 # ============================================================
 with tab2:
 
@@ -1147,20 +964,18 @@ with tab2:
 
         if result:
 
-            safe_result = html.escape(
-                result
-            )
-
             st.markdown(
                 f"""
                 <div class="output-box">
+
                     <div class="output-label">
                         Episode plan
                     </div>
 
                     <div class="output-text">
-                        {safe_result}
+                        {html.escape(result)}
                     </div>
+
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1171,6 +986,7 @@ with tab2:
             st.markdown(
                 """
                 <div class="output-box">
+
                     <div class="output-label">
                         Episode plan
                     </div>
@@ -1179,6 +995,7 @@ with tab2:
                         Your podcast structure will
                         appear here.
                     </div>
+
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1186,7 +1003,7 @@ with tab2:
 
 
 # ============================================================
-# TAB 3 — TEXT ANALYSIS
+# TEXT ANALYSIS
 # ============================================================
 with tab3:
 
@@ -1307,9 +1124,7 @@ with tab3:
 
         tags = ""
 
-        for word, count in analysis[
-            "keywords"
-        ]:
+        for word, count in analysis["keywords"]:
 
             tags += (
                 '<span class="tag">'
@@ -1332,19 +1147,28 @@ with tab3:
 
 
 # ============================================================
-# TAB 4 — PARAMETER LAB
+# PARAMETER LAB
 # ============================================================
 with tab4:
 
     st.markdown(
-        '<div class="parameter-info">'
-        '<b>Gemini 3.8 Flash Parameter Experiment</b><br>'
-        'This experiment compares the model response using '
-        'three different thinking levels: '
-        '<b>Low</b>, <b>Medium</b>, and <b>High</b>. '
-        'The prompt remains the same so you can observe '
-        'how reasoning effort can affect the response.'
-        '</div>',
+        """
+        <div class="parameter-info">
+
+            <b>Gemini 3.8 Flash Parameter Experiment</b>
+            <br><br>
+
+            Compare the same prompt using three
+            different thinking levels:
+
+            <b>Low</b> · <b>Medium</b> · <b>High</b>
+
+            <br>
+
+            This demonstrates how prompt/model parameters
+            can influence AI output.
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -1407,27 +1231,29 @@ with tab4:
             gap="medium",
         )
 
-        # ----------------------------------------------------
         # LOW
-        # ----------------------------------------------------
         with low_col:
 
             st.markdown(
-                '<div class="output-box">'
-                '<div class="thinking-badge">'
-                'LOW'
-                '</div>'
-                '<div class="output-label">'
-                'Thinking Level'
-                '</div>',
-                unsafe_allow_html=True,
-            )
+                """
+                <div class="output-box">
 
-            st.markdown(
-                '<div style="font-size:12px;'
-                'color:#73778A;margin-bottom:12px;">'
-                'Lower reasoning effort'
-                '</div>',
+                    <div class="thinking-badge">
+                        LOW
+                    </div>
+
+                    <div class="output-label">
+                        Thinking Level
+                    </div>
+
+                    <div style="
+                        font-size:12px;
+                        color:#73778A;
+                        margin-bottom:12px;
+                    ">
+                        Lower reasoning effort
+                    </div>
+                """,
                 unsafe_allow_html=True,
             )
 
@@ -1436,31 +1262,33 @@ with tab4:
             )
 
             st.markdown(
-                '</div>',
+                "</div>",
                 unsafe_allow_html=True,
             )
 
-        # ----------------------------------------------------
         # MEDIUM
-        # ----------------------------------------------------
         with medium_col:
 
             st.markdown(
-                '<div class="output-box">'
-                '<div class="thinking-badge">'
-                'MEDIUM'
-                '</div>'
-                '<div class="output-label">'
-                'Thinking Level'
-                '</div>',
-                unsafe_allow_html=True,
-            )
+                """
+                <div class="output-box">
 
-            st.markdown(
-                '<div style="font-size:12px;'
-                'color:#73778A;margin-bottom:12px;">'
-                'Balanced reasoning effort'
-                '</div>',
+                    <div class="thinking-badge">
+                        MEDIUM
+                    </div>
+
+                    <div class="output-label">
+                        Thinking Level
+                    </div>
+
+                    <div style="
+                        font-size:12px;
+                        color:#73778A;
+                        margin-bottom:12px;
+                    ">
+                        Balanced reasoning effort
+                    </div>
+                """,
                 unsafe_allow_html=True,
             )
 
@@ -1469,31 +1297,33 @@ with tab4:
             )
 
             st.markdown(
-                '</div>',
+                "</div>",
                 unsafe_allow_html=True,
             )
 
-        # ----------------------------------------------------
         # HIGH
-        # ----------------------------------------------------
         with high_col:
 
             st.markdown(
-                '<div class="output-box">'
-                '<div class="thinking-badge">'
-                'HIGH'
-                '</div>'
-                '<div class="output-label">'
-                'Thinking Level'
-                '</div>',
-                unsafe_allow_html=True,
-            )
+                """
+                <div class="output-box">
 
-            st.markdown(
-                '<div style="font-size:12px;'
-                'color:#73778A;margin-bottom:12px;">'
-                'Higher reasoning effort'
-                '</div>',
+                    <div class="thinking-badge">
+                        HIGH
+                    </div>
+
+                    <div class="output-label">
+                        Thinking Level
+                    </div>
+
+                    <div style="
+                        font-size:12px;
+                        color:#73778A;
+                        margin-bottom:12px;
+                    ">
+                        Higher reasoning effort
+                    </div>
+                """,
                 unsafe_allow_html=True,
             )
 
@@ -1502,7 +1332,7 @@ with tab4:
             )
 
             st.markdown(
-                '</div>',
+                "</div>",
                 unsafe_allow_html=True,
             )
 
