@@ -171,17 +171,22 @@ def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=500):
     if not api_key:
         return ("⚠️ No Gemini API key configured. Add GEMINI_API_KEY in this app's "
                 "Streamlit Cloud Settings → Secrets.")
-    client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            temperature=temperature,
-            top_p=top_p,
-            max_output_tokens=max_tokens,
-        ),
-    )
-    return response.text.strip()
+    try:
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=temperature,
+                top_p=top_p,
+                max_output_tokens=max_tokens,
+            ),
+        )
+        return response.text.strip()
+    except Exception as e:
+        # Surface the real Gemini error in the app instead of a generic
+        # Streamlit-redacted traceback, so it's easy to diagnose.
+        return f"⚠️ Gemini API error: {e}"
 
 
 # ----------------------------------------------------------------------
