@@ -220,9 +220,20 @@ def generate_response(prompt, temperature=0.7, top_p=1.0, max_tokens=1024):
                 )
                 return response.text.strip()
             except genai_errors.ClientError as e:
-                # 503 = model temporarily overloaded on Google's side; 429 = rate limit.
-                # Both are worth a short retry; anything else, fail immediately.
+                # Retry temporary overloads and throttles; daily quota exhaustion is final.
                 status = getattr(e, "code", None) or getattr(e, "status_code", None)
+                error_details = str(e).lower()
+                if status == 429 and (
+                    "free_tier_requests" in error_details
+                    or "perdaypermodel" in error_details
+                    or "quota exceeded" in error_details
+                ):
+                    return (
+                        "⚠️ Gemini's daily free-tier quota for this model has been reached. "
+                        "Retrying will not help until the quota resets. Check your usage and "
+                        "available limits in Google AI Studio, enable billing if appropriate, "
+                        "or use a model/project with available quota."
+                    )
                 if status in (503, 429) and attempt < 2:
                     last_error = e
                     time.sleep(2 * (attempt + 1))  # 2s, then 4s
